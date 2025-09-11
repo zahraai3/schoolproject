@@ -47,8 +47,28 @@ def update_money(teacher_name: str, updated_salary: int | None = None, updated_n
             print(f"The teacher '{teacher_name}' does not exist ")
 
 
+
+def high_grade():
+  print("🎉 Congratulations to our top students! 🎉\n")
+  with Session(engine) as session:
+      statement = select(Student)
+      students = session.exec(statement).all()
+      for student in students:
+          if student.grades:
+              avg = sum(g.grade for g in student.grades) / len(student.grades)
+              if avg >= 80:
+                print(f"{student.name}: {avg:.2f} - Excellent performance! Keep up the great work🌟")
+    
+              
+
+    
+    
+
+
+
 def main ():
 
    # add_newteacher("MS rafal",3000)
-   update_money("Dr. Sarah Johnson",2000,None)
+#    update_money("Dr. Sarah Johnson",2000,None)
    # select_teachers()
+   high_grade()
