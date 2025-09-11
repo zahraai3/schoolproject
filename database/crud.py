@@ -15,7 +15,7 @@ def select_teacher():
 
 
 def add_newteacher():
-  teacher5 =Teacher(name = " Dr. Aseel Aesar", salary = "400000")
+  teacher5 =Teacher(name = " Dr. Aseel Aesar", salary = 40000)
   with Session (engine) as session:
      session.add(teacher5)
      session.commit()
@@ -32,7 +32,7 @@ def update_money():
    teacher = result.first()
    if teacher:  #يتحقق لذا المعلم موجود او موجود اكثر من مرة واذا ماكو راح يرجع none
     
-    teacher.salary = "600000 IDQ"
+    teacher.salary = 60000
     session.commit()
 
 
@@ -40,7 +40,7 @@ def update_money():
 def main ():
    add_newteacher()
    update_money()
-#    select_teacher()
+   select_teacher()
 
 if __name__ == "__main__":
      main()
