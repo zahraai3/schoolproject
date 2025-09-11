@@ -1,0 +1,19 @@
+# Virtual environment
+.venv/
+
+# Python cache
+pycache/
+*.pyc
+*.pyo
+*.pyd
+
+# Lock files
+*.lock
+
+# IDE/Editor specific files
+.vscode/
+*.code-workspace
+
+# System files
+.DS_Store
+Thumbs.db
