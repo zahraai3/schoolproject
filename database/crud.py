@@ -1,55 +1,54 @@
 
 
 from sqlmodel import Session, select
-from database.models import Teacher
+from database.models import Teacher,Student
 from database.dbctrl import engine
 
 
-def select_teacher():
-  with Session (engine) as session:
-     statement = select(Teacher)
-     result = session.exec(statement)
-     for teach in result:
-        print(f"ID: {teach.id}, Name teacher : {teach.name}, Salary = {teach.salary}")
+def select_teachers():
+   with Session (engine) as session:
+      statement = select(Teacher)
+      result = session.exec(statement)
+      print("")
+      for teach in result:
+         print(f"Teacher Name: {teach.name} , Subject: {teach.subject.name}, Salary: {teach.salary} ")
+      print("")
+      
 
-
-def add_newteacher():
-    with Session (engine) as session:
-       statement = select(Teacher). where (Teacher.name == "Dr. Aseel Aesar")
-       teachfound = session.exec(statement).first()
-       if teachfound:
-          print("the teacher 'Dr. Aseel Aesar' already exists")
-       else:
-          
-          teacher5 =Teacher(name = " Dr. Aseel Aesar", salary = 40000)
-          session.add(teacher5)
-          session.commit()
-          session.refresh(teacher5)
+def add_newteacher(teacher_name:str , teacher_salary:int):
+      with Session (engine) as session:
+         statement = select(Teacher). where (Teacher.name == teacher_name.strip())
+         teachfound = session.exec(statement).first()
+         print("")
+         if teachfound:
+            print(f"Teacher {teacher_name} is already in the system")
+         else:
+            newteacher =Teacher(name = teacher_name, salary = teacher_salary)
+            session.add(newteacher)
+            session.commit()
+            session.refresh(newteacher)
+            print(f"Teacher {newteacher.name} have been added to the system successfuly✅")
 
      
-def update_money():
-  with Session (engine) as session:
-   statement = select( Teacher ).where (Teacher.name == "Dr. Sarah Johnson")
-   teacher = session.exec(statement).first()
+def update_money(teacher_name: str, updated_salary: int | None = None, updated_name: str | None = None):
+    with Session(engine) as session:
+        statement = select(Teacher).where(Teacher.name == teacher_name)
+        teacher = session.exec(statement).first()
 
+        if teacher:
+            if updated_salary is not None:
+                teacher.salary = updated_salary
+            if updated_name is not None:
+                teacher.name = updated_name
 
-   if teacher :
-      print("the teacher 'Dr. Sarah Johnson' exists")
-  # او استخرم firstفي حال الاسم مايكون موجود او موجود اكثر من مرة
-      # if teacher:  #يتحقق لذا المعلم موجود او موجود اكثر من مرة واذا ماكو راح يرجع none
-    
-      teacher.salary = 60000
-      session.commit()
-   else:
-      print("the teacher not exist")
-
+            session.commit()
+            print(f"Teacher '{teacher.name}' has been updated ➡️  ",teacher)
+        else:
+            print(f"The teacher '{teacher_name}' does not exist ")
 
 
 def main ():
 
-   # add_newteacher()
-   # update_money()
-   select_teacher()
-
-if __name__ == "__main__":
-     main()
+   # add_newteacher("MS rafal",3000)
+   update_money("Dr. Sarah Johnson",2000,None)
+   # select_teachers()

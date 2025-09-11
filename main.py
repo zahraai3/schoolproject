@@ -1,12 +1,14 @@
-from database.dbctrl import create_db_and_tables,engine
-from database.models import Student,Grade,studentClass,Teacher,Subject,classTeacher
-
-from sqlmodel import Session
+from database.dbctrl import create_db_and_tables
 from schoolinfo.info import initialinformation
+from database.crud import main
+from database.crud import update_money,select_teachers,add_newteacher
 
-# def main():
-#     create_db_and_tables()
-#     initialinformation()
+def main():
+    create_db_and_tables()
+    # initialinformation()
+    # update_money()
+    # select_teachers()
+    # add_newteacher()
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
