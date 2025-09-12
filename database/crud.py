@@ -1,7 +1,7 @@
 
 
 from sqlmodel import Session, select
-from database.models import Teacher,Student
+from database.models import Teacher,Student,Subject,studentClass
 from database.dbctrl import engine
 
 
@@ -46,9 +46,51 @@ def update_money(teacher_name: str, updated_salary: int | None = None, updated_n
         else:
             print(f"The teacher '{teacher_name}' does not exist ")
 
+def select_subjects():
+    with Session(engine) as session:
+        statement= select(Subject)
+        results= session.exec(statement)
+        for sub in results:
+            print(f" Subject: {sub.name}")
+            if sub.teachers:
+                for t in sub.teachers:
+                    print(f" Teacher: {t.name}")
+            else:
+                print(" no teachers assigned yet")  
+
+def select_student_classes():
+    with Session(engine) as session:                              
+        statement= select(studentClass) 
+        results= session.exec(statement)
+        for cls in results:
+            print(f" Class: {cls.name}")
+            if cls.students:
+                for st in cls.students:
+                    print(f" Student: {st.name}")
+            else:
+                print(" no students in this class yet")
+
+def high_grade():
+  print("🎉 Congratulations to our top students! 🎉\n")
+  with Session(engine) as session:
+      statement = select(Student)
+      students = session.exec(statement).all()
+      for student in students:
+          if student.grades:
+              avg = sum(g.grade for g in student.grades) / len(student.grades)
+              if avg >= 80:
+                print(f"{student.name}: {avg:.2f} - Excellent performance! Keep up the great work🌟")
+    
+              
+
+    
+    
+
+
 
 def main ():
 
    # add_newteacher("MS rafal",3000)
-   update_money("Dr. Sarah Johnson",2000,None)
+#    update_money("Dr. Sarah Johnson",2000,None)
    # select_teachers()
+   high_grade()
