@@ -88,6 +88,25 @@ def high_grade():
 
 
 
+
+def high_grade():
+  print("🎉 Congratulations to our top students! 🎉\n")
+  with Session(engine) as session:
+      statement = select(Student)
+      students = session.exec(statement).all()
+      for student in students:
+          if student.grades:
+              avg = sum(g.grade for g in student.grades) / len(student.grades)
+              if avg >= 80:
+                print(f"{student.name}: {avg:.2f} - Excellent performance! Keep up the great work🌟")
+    
+              
+
+    
+    
+
+
+
 def main ():
 
    # add_newteacher("MS rafal",3000)
