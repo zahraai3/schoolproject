@@ -95,5 +95,25 @@ def high_grade():
     
 
 
+def show_one_student(student_name):
+    print("")
+    with Session(engine) as session:
+        # Find the student by his name
+        student = session.exec(select(Student).where(Student.name == student_name)).first()
+        if not student:
+            print(f"Student '{student_name}' not found!")
+        else:
+        # Print info using relationships
+        
+            print(f"Student: {student.name}")
+            print(f"Age: {student.age}")
+            if student.student_class:
+                print(f"Class: {student.student_class.name}")
+            else:
+                print("Class: None")
 
+            print("Grades:")
+            for grade in student.grades:
+                print(f"  {grade.subject.name}: {grade.grade}")
+    print("")
 

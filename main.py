@@ -1,6 +1,6 @@
 from database.dbctrl import create_db_and_tables
 from schoolinfo.info import initialinformation
-from database.crud import  select_teachers,add_newteacher,update_teacher,select_subjects,select_student_classes,high_grade
+from database.crud import  select_teachers,add_newteacher,update_teacher,select_subjects,select_student_classes,high_grade,show_one_student
 
 
 def main():
@@ -11,7 +11,8 @@ def main():
     # update_teacher("Dr.atheer",440,None)
     # select_subjects()
     # select_student_classes()
-    high_grade()
+    # high_grade()
+    show_one_student("Nina Garcia")
 
 if __name__ == "__main__":
     main()
