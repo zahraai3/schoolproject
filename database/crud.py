@@ -1,8 +1,8 @@
 from sqlmodel import Session, select
-from database.models import Teacher,Student,Subject,studentClass
+from database.models import *
 from database.dbctrl import engine
 
-
+#rafal
 def select_teachers():
     with Session (engine) as session:
         statement = select(Teacher)
@@ -12,7 +12,7 @@ def select_teachers():
             print(f"Teacher Name: {teach.name} , Subject: {teach.subject.name}, Salary: {teach.salary} ")
         print("")
       
-
+#rafal
 def add_newteacher(teacher_name:str , teacher_salary:int):
     with Session (engine) as session:
         statement = select(Teacher). where (Teacher.name == teacher_name.strip())
@@ -30,7 +30,7 @@ def add_newteacher(teacher_name:str , teacher_salary:int):
         print("")
             
 
-     
+#rafal  
 def update_teacher(teacher_name: str, updated_salary: int | None = None, updated_name: str | None = None):
     print("")
     with Session(engine) as session:
@@ -49,7 +49,7 @@ def update_teacher(teacher_name: str, updated_salary: int | None = None, updated
             print(f"The teacher '{teacher_name}' does not exist ")
     print("")
 
-
+#tabarak
 def select_subjects():
     print("")
     with Session(engine) as session:
@@ -64,7 +64,7 @@ def select_subjects():
                 print(" no teachers assigned yet")  
     print("")
 
-
+#tabarak
 def select_student_classes():
     print("")
     with Session(engine) as session:                              
@@ -79,7 +79,7 @@ def select_student_classes():
                 print(" no students in this class yet")
     print("")
 
-
+#rafal
 def high_grade():
     print("")
     print("🎉 Congratulations to our top students! 🎉\n")
@@ -94,7 +94,7 @@ def high_grade():
     print("")
     
 
-
+#zahraa
 def show_one_student(student_name):
     print("")
     with Session(engine) as session:
