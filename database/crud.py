@@ -116,6 +116,7 @@ def show_one_student(student_name):
             for grade in student.grades:
                 print(f"  {grade.subject.name}: {grade.grade}")
                 if student.grades:
+                    
                     avg = sum(g.grade for g in student.grades) / len(student.grades)
             print(f"➡️  Average :  {avg:.2f} ")
     print("")
