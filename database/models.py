@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
+from database.schema import*
 
 
 #for students
@@ -37,23 +38,23 @@ class studentClass(SQLModel, table=True):
     name: str
 
     students: Optional[List["Student"]] = Relationship(back_populates="student_class")
-    teacherclass: Optional[List["classTeacher"]] = Relationship(back_populates="classes")
+    teacherclass: Optional[List["Classteacher"]] = Relationship(back_populates="classes")
 
 # to know what class take each teacher
-class classTeacher(SQLModel, table=True):
+#هذا كلاس مودل تيبل الاساسي الي حيكون بي اعمده يربط بي المعلم والصف
+class Classteacher(Base, table = True):
     id: int | None = Field(default=None, primary_key=True)
-    teacher_id: int | None = Field(default=None, foreign_key="teacher.id")
-    class_id: int | None = Field(default=None, foreign_key="studentclass.id")
-
     teacher: Optional["Teacher"] = Relationship(back_populates="teacher_class")
     classes: Optional["studentClass"] = Relationship(back_populates="teacherclass")
 
-# Teachers
-class Teacher(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    name: str
-    salary: int
-    subject_id: int | None = Field(default=None, foreign_key="subject.id")
 
-    teacher_class: Optional[List["classTeacher"]] = Relationship(back_populates="teacher")
+    
+
+
+#هذا هم اساسي يحتوي على معلم ويحتاج الى مادة
+class Teacher(Teacherbase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    teacher_class: list["Classteacher"]= Relationship(back_populates="teacher")
     subject: Optional["Subject"] = Relationship(back_populates="teachers")
+
+    
