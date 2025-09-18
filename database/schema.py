@@ -85,6 +85,16 @@ class SubjectRead(SQLModel):
     name: str
     teachers: List[TeacherInSubjectRead] = []
 
+#response model to read class
+class StudentInClassRead(SQLModel):
+    id:int
+    name:str
+    age: int|None=None
+
+class ClassRead(SQLModel):
+    id:int
+    name:str
+    students:List[StudentInClassRead]= []
 
 
 

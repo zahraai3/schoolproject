@@ -98,13 +98,35 @@ def creat_classteach(classteach:Creatc):
     return db_class
 
 #i used Depends here becasue there are some issues with session and relation had happened so yeah 
+
 #show the subjects and their teachers :
-@app.get('/subjects/{id}', response_model=SubjectRead , tags=["Class"])
-def select_subject(*, id: int, session: Session = Depends(get_session)):
-    db_subject = session.get(Subject, id)
+@app.get("/subjects/",response_model=list[SubjectRead], tags=["Class"])
+def read_subjects(*,session: Session= Depends(get_session)):
+    subjects= session.exec(select(Subject)).all()
+    return subjects
+
+#read a single subject with its teacher
+@app.get('/subjects/{subject_id}', response_model=SubjectRead , tags=["Class"])
+def read_subject(*, subject_id: int, session: Session = Depends(get_session)):
+    db_subject = session.get(Subject, subject_id)
     if not db_subject:
-        raise HTTPException(status_code=404, detail="Subject not found")
+        raise HTTPException(status_code=404, detail="Subject  not found")
     return db_subject
+
+# read classes with their students:
+@app.get("/classes/",response_model=list[ClassRead], tags=["Class"])
+def read_classes(*,session: Session= Depends(get_session)):
+    classes= session.exec(select(studentClass)).all()
+    return classes
+
+#read a single subject with its teacher
+@app.get('/classes/{class_id}', response_model=ClassRead , tags=["Class"])
+def read_class(*, class_id: int, session: Session = Depends(get_session)):
+    db_class = session.get(studentClass, class_id)
+    if not db_class:
+        raise HTTPException(status_code=404, detail="class  not found")
+    return db_class
+
 
 #read a single student :
 @app.get("/students/{student_id}",tags=["Student"],response_model=StudentRead)
@@ -112,7 +134,7 @@ def get_student(student_id: int):
     with Session(engine) as session :
       student = session.get(Student, student_id)
       if not student:
-          raise HTTPException(status_code=404, detail="Student not found")
+          raise HTTPException(status_code=404, detail="Student  not found")
       return student
 
 #read a student grades 
@@ -120,7 +142,7 @@ def get_student(student_id: int):
 def get_student_grades(student_id: int, session: Session = Depends(get_session)):
     student = session.get(Student, student_id)
     if not student:
-        raise HTTPException(status_code=404, detail="Student not found")
+        raise HTTPException(status_code=404, detail="Student  not found")
     # حته نرجع الدرجات 
     result = []
     for grade in student.grades:
