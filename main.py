@@ -98,7 +98,6 @@ def creat_classteach(classteach:Creatc):
     return db_class
 
 #i used Depends here becasue there are some issues with session and relation had happened so yeah 
-
 #show the subjects and their teachers :
 @app.get("/subjects/",response_model=list[SubjectRead], tags=["Class"])
 def read_subjects(*,session: Session= Depends(get_session)):
