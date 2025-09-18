@@ -34,9 +34,8 @@ app = FastAPI(
 
 #//////////////////////////
 #هذا البوست معناها المستخدم راح يكتب بيانات والبيانات هي نفسها الي ذكرتها بالكلاس الانشاء لازم يدخلهن وبعدها حفظتهن بالتيبل 
-@app.post("/tacher/", response_model=Teacherpublic ,tags=["Teacher"])
-def creat_teacher(teacher:Creatteacher):
-    with Session (engine) as session:
+@app.post("/teacher/", response_model=Teacherpublic ,tags=["Teacher"])
+def creat_teacher(*,teacher:Creatteacher,session:Session= Depends(get_session)):
         db_teacher = Teacher.model_validate(teacher)
         session.add(db_teacher)
         session.commit()
@@ -45,8 +44,7 @@ def creat_teacher(teacher:Creatteacher):
 
 #هذا الكيت معناه  المستخدم  شنو يريد اطلعله ف هنا  اطلعله معلم واحد حسب الايدي الي يدخله
 @app.get("/teacher/{teacher_id}", response_model=Teacherpublic ,tags=["Teacher"])
-def read_teacher(teacher_id:int):
-  with Session (engine) as session:
+def read_teacher(*, teacher_id:int, session:Session= Depends(get_session)):
      teacher= session.get(Teacher, teacher_id)
      if not teacher:
        raise HTTPException(status_code=404, detail="teacher not found")#هذا ارفع خطا في حال المعلم ماكو 
@@ -54,18 +52,16 @@ def read_teacher(teacher_id:int):
 
 #هنا اطلع كل المعلمين للمستخدم واستخدمت لست لان الريسبونس مالتي راح يكون مجمومه ممكن
 @app.get("/teacher/all_teachers", response_model=list[Teacherpublic] ,tags=["Teacher"])
-def read_teachers():
-    with Session (engine) as session:
+def read_teachers(*,session:Session= Depends(get_session)):
      teacher= session.exec(select(Teacher)).all()
      return teacher
     
 #هنا التعديل وراح يكون تعديل جزئي مو الا  المستخدم يعدل كل البيانات مالته هو مخير
 @app.patch("/teacher/{teacher_id}", response_model=Teacherpublic ,tags=["Teacher"])
-def update_teacher(teacher_id:int, teacher: Updateteacher):
-    with Session (engine) as session:
+def update_teacher(*, teacher_id:int, teacher: Updateteacher, session:Session= Depends(get_session)):
       db_teacher= session.get(Teacher, teacher_id)
       if not db_teacher:
-              raise HTTPException(status_code=404, detail="Teeacher not found")
+              raise HTTPException(status_code=404, detail="Teacher not found")
       teacher_data = teacher.model_dump(exclude_unset=True)  #هذا ياخذ الاوبجكت ويشوف شنو عدلت وشنو ماعدلت ويروح يحدث التيبل القدديم يبقى نفسه والمتغير يتعدل
       db_teacher.sqlmodel_update(teacher_data) #احدث قاعدة البيانات
       session.add(db_teacher)
@@ -75,8 +71,7 @@ def update_teacher(teacher_id:int, teacher: Updateteacher):
 
 #حذف معلم لما يتقاعد او ينفصل :)
 @app.delete("/teacher/{teacher_id}", tags=["Teacher"])
-def delete_teacher(teacher_id: int):
-    with Session(engine) as session:
+def delete_teacher(*, teacher_id: int, session:Session= Depends(get_session)):
         db_teacher = session.get(Teacher, teacher_id)
         if not db_teacher:
             raise HTTPException(status_code=404, detail="Teacher not found")
@@ -88,9 +83,7 @@ def delete_teacher(teacher_id: int):
 #//////////////////////////
 #اضافه معلم للصف
 @app.post("/class_teacher/", response_model=Publicc ,tags=["Class"])
-def creat_classteach(classteach:Creatc):
-
-  with Session (engine) as session:
+def creat_classteach(*, classteach:Creatc, session:Session= Depends(get_session)):
     db_class = Classteacher.model_validate(classteach)
     session.add(db_class)
     session.commit()
@@ -129,8 +122,7 @@ def read_class(*, class_id: int, session: Session = Depends(get_session)):
 
 #read a single student :
 @app.get("/students/{student_id}",tags=["Student"],response_model=StudentRead)
-def get_student(student_id: int):
-    with Session(engine) as session :
+def get_student(*,student_id: int, session:Session= Depends(get_session)):
       student = session.get(Student, student_id)
       if not student:
           raise HTTPException(status_code=404, detail="Student  not found")
@@ -154,8 +146,7 @@ def get_student_grades(student_id: int, session: Session = Depends(get_session))
 
 #adding a new student :
 @app.post("/student/new_student", response_model=StudentCreate ,tags=["Student"])
-def creat_student(new_student:StudentCreate):
-    with Session (engine) as session:
+def creat_student(*, new_student:StudentCreate, session:Session= Depends(get_session)):
         db_student = Student.model_validate(new_student)
         session.add(db_student)
         session.commit()
@@ -164,8 +155,7 @@ def creat_student(new_student:StudentCreate):
 
 #deleting a student :
 @app.delete("/student/{student_id}", tags=["Student"])
-def delete_student(student_id: int):
-    with Session(engine) as session:
+def delete_student(*,student_id: int, session:Session= Depends(get_session)):
         db_student = session.get(Student, student_id)
         if not db_student:
             raise HTTPException(status_code=404, detail="Student not found")
@@ -176,8 +166,7 @@ def delete_student(student_id: int):
 
 #edditing a student info :
 @app.patch("/student/{student_id}", response_model=StudentUpdate ,tags=["Student"])
-def update_student(student_id:int, updated_student: StudentUpdate):
-    with Session (engine) as session:
+def update_student(*, student_id:int, updated_student: StudentUpdate, session:Session= Depends(get_session)):
       db_student= session.get(Student, student_id)
       if not db_student:
               raise HTTPException(status_code=404, detail="Student not found")
