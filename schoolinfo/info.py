@@ -1,5 +1,5 @@
 from sqlmodel import Session
-from database.models import Student,Grade,studentClass,Teacher,Subject,classTeacher
+from database.models import Student,Grade,studentClass,Teacher,Subject,Classteacher
 from database.dbctrl import engine
 
 sqlite_file_name = "school.db"
@@ -45,15 +45,15 @@ def initialinformation() :
 
         
         class_teacher_data = [
-            classTeacher(teacher_id=teachers_data[0].id, class_id=classes_data[0].id), 
-            classTeacher(teacher_id=teachers_data[1].id, class_id=classes_data[0].id),  
-            classTeacher(teacher_id=teachers_data[2].id, class_id=classes_data[1].id),  
-            classTeacher(teacher_id=teachers_data[3].id, class_id=classes_data[1].id)   
+            Classteacher(teacher_id=teachers_data[0].id, class_id=classes_data[0].id), 
+            Classteacher(teacher_id=teachers_data[1].id, class_id=classes_data[0].id),  
+            Classteacher(teacher_id=teachers_data[2].id, class_id=classes_data[1].id),  
+            Classteacher(teacher_id=teachers_data[3].id, class_id=classes_data[1].id)   
         ]
 
         session.add_all(class_teacher_data)
         session.commit()
-        print("|||||||| : added CLASSTEACHER data")
+        print("|||||||| : added Classteacher data")
 
 
         students_data = [

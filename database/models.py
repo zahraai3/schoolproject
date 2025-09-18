@@ -48,12 +48,10 @@ class Classteacher(Base, table = True):
     classes: Optional["studentClass"] = Relationship(back_populates="teacherclass")
 
 
-    
-
-
 #هذا هم اساسي يحتوي على معلم ويحتاج الى مادة
 class Teacher(Teacherbase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    subject_id: int | None = Field(default=None, foreign_key="subject.id")
     teacher_class: list["Classteacher"]= Relationship(back_populates="teacher")
     subject: Optional["Subject"] = Relationship(back_populates="teachers")
 
