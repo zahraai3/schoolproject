@@ -28,6 +28,11 @@ app = FastAPI(
             "name": "Class",
             "description": "Manage classes and their relationships with teachers/students ",
         },
+        {
+            "name": "Subject",
+            "description": "Manage Subject and their data ",
+        },
+
     ]
 ) 
 
@@ -51,10 +56,10 @@ def read_teacher(*, teacher_id:int, session:Session= Depends(get_session)):
      return teacher 
 
 #هنا اطلع كل المعلمين للمستخدم واستخدمت لست لان الريسبونس مالتي راح يكون مجمومه ممكن
-@app.get("/teacher/all_teachers", response_model=list[Teacherpublic] ,tags=["Teacher"])
+@app.get("/teachers", response_model=list[Teacherpublic] ,tags=["Teacher"])
 def read_teachers(*,session:Session= Depends(get_session)):
-     teacher= session.exec(select(Teacher)).all()
-     return teacher
+     teachers= session.exec(select(Teacher)).all()
+     return teachers
     
 #هنا التعديل وراح يكون تعديل جزئي مو الا  المستخدم يعدل كل البيانات مالته هو مخير
 @app.patch("/teacher/{teacher_id}", response_model=Teacherpublic ,tags=["Teacher"])
@@ -92,13 +97,13 @@ def creat_classteach(*, classteach:Creatc, session:Session= Depends(get_session)
 
 #i used Depends here becasue there are some issues with session and relation had happened so yeah 
 #show the subjects and their teachers :
-@app.get("/subjects/",response_model=list[SubjectRead], tags=["Class"])
+@app.get("/subjects/",response_model=list[SubjectRead], tags=["Subject"])
 def read_subjects(*,session: Session= Depends(get_session)):
     subjects= session.exec(select(Subject)).all()
     return subjects
 
 #read a single subject with its teacher
-@app.get('/subjects/{subject_id}', response_model=SubjectRead , tags=["Class"])
+@app.get('/subjects/{subject_id}', response_model=SubjectRead , tags=["Subject"])
 def read_subject(*, subject_id: int, session: Session = Depends(get_session)):
     db_subject = session.get(Subject, subject_id)
     if not db_subject:
